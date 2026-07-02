@@ -12,7 +12,7 @@
         <div class="w-64 bg-white shadow-md">
             <h2 class="text-2xl font-bold p-4">User Panel</h2>
             <nav class="flex flex-col p-4 space-y-2">
-                <a href="{{ route('user.dashboard') }}" class="hover:bg-gray-200 p-2 rounded">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="hover:bg-gray-200 p-2 rounded">Dashboard</a>
                 <a href="{{ route('buku.index') }}" class="hover:bg-gray-200 p-2 rounded">Buku</a>
                 <a href="{{ route('ruangan.index') }}" class="hover:bg-gray-200 p-2 rounded">Ruangan</a>
                 <a href="{{ route('peminjaman-buku.index') }}" class="hover:bg-gray-200 p-2 rounded">Peminjaman Buku</a>
@@ -23,7 +23,7 @@
         {{-- Main Content --}}
         <div class="flex-1 p-6">
             <nav class="flex justify-end mb-4">
-                <span class="mr-4">{{ auth()->user()->name }}</span>
+                <span class="mr-4">{{ auth()->user()->nama }}</span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="bg-red-500 text-white px-3 py-1 rounded">Logout</button>

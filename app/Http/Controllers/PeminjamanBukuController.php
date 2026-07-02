@@ -29,6 +29,11 @@ public function store(Request $request) {
         'status' => 'required|in:pending,dipinjam,dikembalikan',
     ]);
 
+    $buku = Buku::findOrFail($request->buku_id);
+    if ($buku->stok <= 0) {
+        return back()->withErrors(['buku_id' => 'Stok buku ini sedang habis.'])->withInput();
+    }
+
     PeminjamanBuku::create($request->all());
     return redirect()->route('peminjaman-buku.index')->with('success', 'Data berhasil ditambahkan');
 }
@@ -57,6 +62,39 @@ public function update(Request $request, $id) {
 public function destroy($id) {
     PeminjamanBuku::destroy($id);
     return redirect()->route('peminjaman-buku.index')->with('success', 'Data berhasil dihapus');
+}
+
+public function approve($id) {
+    $peminjaman = PeminjamanBuku::with('buku')->findOrFail($id);
+    
+    if ($peminjaman->buku->stok <= 0) {
+        return redirect()->back()->with('error', 'Gagal menyetujui, stok buku saat ini habis.');
+    }
+
+    $peminjaman->update(['status' => 'dipinjam']);
+    
+    // Kurangi stok
+    $peminjaman->buku->decrement('stok');
+
+    return redirect()->back()->with('success', 'Peminjaman buku disetujui. Stok dikurangi.');
+}
+
+public function reject($id) {
+    $peminjaman = PeminjamanBuku::findOrFail($id);
+    // Karena enum di database hanya pending, dipinjam, dikembalikan,
+    // kita akan menghapus data permohonan yang ditolak agar tidak mengotori tabel.
+    $peminjaman->delete();
+    return redirect()->back()->with('success', 'Peminjaman buku telah ditolak (dihapus).');
+}
+
+public function returnBook($id) {
+    $peminjaman = PeminjamanBuku::with('buku')->findOrFail($id);
+    $peminjaman->update(['status' => 'dikembalikan']);
+    
+    // Tambah stok kembali
+    $peminjaman->buku->increment('stok');
+
+    return redirect()->back()->with('success', 'Buku telah dikembalikan. Stok bertambah.');
 }
 
 }

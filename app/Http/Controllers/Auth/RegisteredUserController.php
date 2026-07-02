@@ -27,16 +27,16 @@ class RegisteredUserController extends Controller
     {
         // Validasi input
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,      // sesuaikan dengan kolom database
+            'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user',               // kolom role harus ada
+            'role' => 'mahasiswa',
         ]);
 
 
@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // Redirect sesuai role
-        return redirect()->route('user.dashboard');
+        return redirect()->route('dashboard');
     }
 }

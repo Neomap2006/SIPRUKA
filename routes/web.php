@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,8 +25,23 @@ use App\Http\Controllers\PeminjamanBukuController;
 use App\Http\Controllers\PeminjamanRuanganController;
 
 Route::middleware('auth')->group(function () {
-    Route::resource('buku', BukuController::class);
-    Route::resource('ruangan', RuanganController::class);
+    // Akses publik (semua user login)
+    Route::resource('buku', BukuController::class)->only(['index']);
+    Route::resource('ruangan', RuanganController::class)->only(['index']);
     Route::resource('peminjaman-buku', PeminjamanBukuController::class);
     Route::resource('peminjaman-ruangan', PeminjamanRuanganController::class);
+
+    // Akses khusus admin
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('buku', BukuController::class)->except(['index', 'show']);
+        Route::resource('ruangan', RuanganController::class)->except(['index', 'show']);
+        
+        // Routes for approval
+        Route::patch('peminjaman-ruangan/{id}/approve', [PeminjamanRuanganController::class, 'approve'])->name('peminjaman-ruangan.approve');
+        Route::patch('peminjaman-ruangan/{id}/reject', [PeminjamanRuanganController::class, 'reject'])->name('peminjaman-ruangan.reject');
+        
+        Route::patch('peminjaman-buku/{id}/approve', [PeminjamanBukuController::class, 'approve'])->name('peminjaman-buku.approve');
+        Route::patch('peminjaman-buku/{id}/reject', [PeminjamanBukuController::class, 'reject'])->name('peminjaman-buku.reject');
+        Route::patch('peminjaman-buku/{id}/return', [PeminjamanBukuController::class, 'returnBook'])->name('peminjaman-buku.return');
+    });
 });
