@@ -99,18 +99,6 @@
                                value="{{ $peminjaman->durasi }} menit">
                     </div>
 
-                    {{-- Status --}}
-                    <div>
-                        <label for="status" class="block text-sm font-semibold text-slate-300 mb-2">Status</label>
-                        <select name="status" id="status" 
-                                class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition appearance-none"
-                                required>
-                            <option value="pending" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'pending') ? 'selected' : '' }}>Pending</option>
-                            <option value="disetujui" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'disetujui') ? 'selected' : '' }}>Disetujui</option>
-                            <option value="ditolak" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'ditolak') ? 'selected' : '' }}>Ditolak</option>
-                        </select>
-                    </div>
-
                     <div class="pt-2">
                         <button type="submit" 
                                 class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg shadow-indigo-600/10">

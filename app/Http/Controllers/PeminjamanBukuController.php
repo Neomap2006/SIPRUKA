@@ -22,11 +22,9 @@ public function create() {
 
 public function store(Request $request) {
     $request->validate([
-        'user_id' => 'required',
         'buku_id' => 'required',
         'tanggal_pinjam' => 'required|date',
         'tanggal_kembali' => 'nullable|date|after_or_equal:tanggal_pinjam',
-        'status' => 'required|in:pending,dipinjam,dikembalikan',
     ]);
 
     $buku = Buku::findOrFail($request->buku_id);
@@ -34,7 +32,13 @@ public function store(Request $request) {
         return back()->withErrors(['buku_id' => 'Stok buku ini sedang habis.'])->withInput();
     }
 
-    PeminjamanBuku::create($request->all());
+    PeminjamanBuku::create([
+        'user_id' => auth()->id(),
+        'buku_id' => $request->buku_id,
+        'tanggal_pinjam' => $request->tanggal_pinjam,
+        'tanggal_kembali' => $request->tanggal_kembali,
+        'status' => 'pending',
+    ]);
     return redirect()->route('peminjaman-buku.index')->with('success', 'Data berhasil ditambahkan');
 }
 
@@ -47,15 +51,20 @@ public function edit($id) {
 
 public function update(Request $request, $id) {
     $request->validate([
-        'user_id' => 'required',
         'buku_id' => 'required',
         'tanggal_pinjam' => 'required|date',
         'tanggal_kembali' => 'nullable|date|after_or_equal:tanggal_pinjam',
-        'status' => 'required|in:pending,dipinjam,dikembalikan',
     ]);
 
     $peminjaman = PeminjamanBuku::findOrFail($id);
-    $peminjaman->update($request->all());
+    
+    // Hanya allow update data yang aman
+    $peminjaman->update([
+        'buku_id' => $request->buku_id,
+        'tanggal_pinjam' => $request->tanggal_pinjam,
+        'tanggal_kembali' => $request->tanggal_kembali,
+    ]);
+    
     return redirect()->route('peminjaman-buku.index')->with('success', 'Data berhasil diupdate');
 }
 

@@ -34,22 +34,6 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- User --}}
-                    <div>
-                        <label for="user_id" class="block text-sm font-semibold text-slate-300 mb-2">User</label>
-                        <select name="user_id" id="user_id" 
-                                class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition appearance-none"
-                                required>
-                            <option value="" class="bg-slate-900 text-slate-400">Pilih User</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" class="bg-slate-900 text-slate-200"
-                                    {{ (old('user_id', $peminjaman->user_id) == $user->id) ? 'selected' : '' }}>
-                                    {{ $user->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     {{-- Buku --}}
                     <div>
                         <label for="buku_id" class="block text-sm font-semibold text-slate-300 mb-2">Buku</label>
@@ -81,18 +65,6 @@
                         <input type="date" name="tanggal_kembali" id="tanggal_kembali" 
                                class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
                                value="{{ old('tanggal_kembali', $peminjaman->tanggal_kembali) }}">
-                    </div>
-
-                    {{-- Status --}}
-                    <div>
-                        <label for="status" class="block text-sm font-semibold text-slate-300 mb-2">Status</label>
-                        <select name="status" id="status" 
-                                class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition appearance-none"
-                                required>
-                            <option value="pending" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'pending') ? 'selected' : '' }}>Pending</option>
-                            <option value="dipinjam" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'dipinjam') ? 'selected' : '' }}>Dipinjam</option>
-                            <option value="dikembalikan" class="bg-slate-900 text-slate-200" {{ (old('status', $peminjaman->status) == 'dikembalikan') ? 'selected' : '' }}>Dikembalikan</option>
-                        </select>
                     </div>
 
                     <div class="pt-2">

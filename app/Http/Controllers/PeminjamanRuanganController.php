@@ -101,7 +101,6 @@ class PeminjamanRuanganController extends Controller
             'tanggal_selesai' => 'required|date',
             'waktu_selesai'   => 'required',
             'keperluan'       => 'nullable|string',
-            'status'          => 'required|in:pending,disetujui,ditolak',
         ]);
 
         try {
@@ -139,7 +138,6 @@ class PeminjamanRuanganController extends Controller
                 'waktu_selesai'  => $request->waktu_selesai,
                 'durasi'         => $durasiMenit,
                 'keperluan'      => $request->keperluan,
-                'status'         => $request->status,
             ]);
 
             return redirect()->route('peminjaman-ruangan.index')
