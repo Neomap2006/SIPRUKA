@@ -22,7 +22,27 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'nipd',
+        'prodi',
+        'jabatan',
+        'no_hp',
     ];
+
+    /**
+     * Relasi ke pengajuan peminjaman sebagai pemohon (Mahasiswa/User)
+     */
+    public function peminjaman()
+    {
+        return $this->hasMany(PeminjamanRuangan::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke peminjaman yang diverifikasi/disetujui (Admin)
+     */
+    public function verifikasiPeminjaman()
+    {
+        return $this->hasMany(PeminjamanRuangan::class, 'admin_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

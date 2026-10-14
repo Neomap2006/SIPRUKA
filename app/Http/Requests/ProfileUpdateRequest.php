@@ -16,8 +16,8 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama' => ['required', 'string', 'max:255'],
-            'email' => [
+            'nama'    => ['required', 'string', 'max:255'],
+            'email'   => [
                 'required',
                 'string',
                 'lowercase',
@@ -25,6 +25,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'nipd'    => ['nullable', 'string', 'max:50'],
+            'prodi'   => ['nullable', 'string', 'max:100'],
+            'jabatan' => ['nullable', 'string', 'max:100'],
+            'no_hp'   => ['nullable', 'string', 'max:30'],
         ];
     }
 }

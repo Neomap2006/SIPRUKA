@@ -28,6 +28,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Bersihkan url.intended jika mengarah ke endpoint API/JSON notifikasi
+        $intended = session()->get('url.intended');
+        if ($intended && (str_contains($intended, '/notifications') || str_contains($intended, '/export-') || str_contains($intended, '/dokumen/'))) {
+            session()->forget('url.intended');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -27,16 +27,22 @@ class RegisteredUserController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'nama'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'nipd'     => ['nullable', 'string', 'max:50'],
+            'prodi'    => ['nullable', 'string', 'max:100'],
+            'no_hp'    => ['nullable', 'string', 'max:30'],
         ]);
 
         $user = User::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
+            'nama'     => $request->nama,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'mahasiswa',
+            'role'     => 'mahasiswa',
+            'nipd'     => $request->nipd,
+            'prodi'    => $request->prodi,
+            'no_hp'    => $request->no_hp,
         ]);
 
 

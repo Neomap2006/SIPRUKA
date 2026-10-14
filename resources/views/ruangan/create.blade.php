@@ -1,14 +1,25 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-bold text-2xl text-slate-100 leading-tight">Tambah Ruangan</h2>
+        <div class="flex items-center gap-3">
+            <div class="p-2 rounded-xl bg-navy-deep/40 border border-cyan-neon/30 text-cyan-bright">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="font-bold text-2xl text-white tracking-tight leading-tight">Tambah Ruangan Baru</h2>
+                <p class="text-xs text-slate-400">Daftarkan inventaris ruangan baru ke dalam sistem SIPRUKA</p>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800 shadow-lg p-8">
+            <div class="bg-cyber-card border border-navy-deep rounded-2xl shadow-neon p-4 sm:p-8 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-neon/5 rounded-full blur-3xl pointer-events-none"></div>
 
                 <a href="{{ route('ruangan.index') }}" 
-                   class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-200 text-sm font-medium mb-6 transition-colors">
+                   class="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-bright text-sm font-medium mb-6 transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>
@@ -16,7 +27,7 @@
                 </a>
 
                 @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl">
+                    <div class="mb-6 p-4 bg-red-500/10 text-red-400 border border-red-500/30 rounded-xl">
                         <ul class="space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li class="text-sm flex items-start gap-2">
@@ -30,31 +41,43 @@
                     </div>
                 @endif
 
-                <form action="{{ route('ruangan.store') }}" method="POST" class="space-y-5">
+                <form action="{{ route('ruangan.store') }}" method="POST" class="space-y-6" data-auto-draft="ruangan_create">
                     @csrf
 
                     <div>
-                        <label for="nama_ruangan" class="block text-sm font-semibold text-slate-300 mb-2">Nama Ruangan</label>
+                        <label for="nama_ruangan" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Ruangan <span class="text-cyan-neon">*</span></label>
                         <input type="text" name="nama_ruangan" id="nama_ruangan" 
-                               class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 placeholder-slate-500 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
+                               class="w-full bg-cyber-black border border-navy-deep text-slate-200 placeholder-slate-500 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-neon focus:ring-1 focus:ring-cyan-neon transition text-sm font-medium"
                                value="{{ old('nama_ruangan') }}"
-                               placeholder="Contoh: Lab Komputer A"
+                               placeholder="Contoh: Lab Komputer A / Ruang Seminar 1"
                                required>
                     </div>
 
                     <div>
-                        <label for="kapasitas" class="block text-sm font-semibold text-slate-300 mb-2">Kapasitas (orang)</label>
+                        <label for="lokasi" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Lokasi / Gedung</label>
+                        <input type="text" name="lokasi" id="lokasi" 
+                               class="w-full bg-cyber-black border border-navy-deep text-slate-200 placeholder-slate-500 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-neon focus:ring-1 focus:ring-cyan-neon transition text-sm font-medium"
+                               value="{{ old('lokasi') }}"
+                               placeholder="Contoh: Gedung Rektorat Lt. 2">
+                    </div>
+
+                    <div>
+                        <label for="kapasitas" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Kapasitas (orang) <span class="text-cyan-neon">*</span></label>
                         <input type="number" name="kapasitas" id="kapasitas" 
-                               class="w-full bg-slate-800/60 border border-slate-700 text-slate-200 placeholder-slate-500 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
+                               class="w-full bg-cyber-black border border-navy-deep text-slate-200 placeholder-slate-500 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-neon focus:ring-1 focus:ring-cyan-neon transition text-sm font-medium"
                                value="{{ old('kapasitas') }}"
                                placeholder="Contoh: 30"
                                min="1"
                                required>
                     </div>
 
-                    <div class="pt-2">
+                    <div class="pt-4 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 border-t border-navy-deep">
+                        <a href="{{ route('ruangan.index') }}" 
+                           class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-navy-deep/30 transition">
+                            Batal
+                        </a>
                         <button type="submit" 
-                                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-lg shadow-indigo-600/10">
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-navy-deep to-cyan-neon hover:to-cyan-bright text-black font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-neon">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
@@ -66,4 +89,3 @@
         </div>
     </div>
 </x-app-layout>
-
