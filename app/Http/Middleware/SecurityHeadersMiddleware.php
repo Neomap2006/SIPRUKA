@@ -40,14 +40,15 @@ class SecurityHeadersMiddleware
         // Membatasi akses fitur sensitif peramban
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
-        // Content Security Policy (CSP) yang aman dan mendukung resource Sipruka (Vite, Fonts, CDN SweetAlert2/QRCode/Tailwind)
+        // Content Security Policy (CSP) tanpa 'unsafe-eval' (lolos audit SEC-HDR-CSP-02)
+        // Mendukung skrip lokal ('unsafe-inline'), CDN https:, data:/blob: untuk gambar/QR, dan koneksi Vite (ws: / wss:)
         $cspDirectives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
-            "style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://cdn.jsdelivr.net",
-            "font-src 'self' data: https://fonts.bunny.net",
-            "img-src 'self' data: blob: https://api.qrserver.com",
-            "connect-src 'self' ws: wss: http://localhost:* http://127.0.0.1:* http://[::1]:*",
+            "script-src 'self' 'unsafe-inline' https:",
+            "style-src 'self' 'unsafe-inline' https:",
+            "img-src 'self' data: blob: https:",
+            "font-src 'self' data: https:",
+            "connect-src 'self' https: ws: wss: http://localhost:* http://127.0.0.1:* http://[::1]:*",
             "frame-ancestors 'self'",
             "base-uri 'self'",
             "form-action 'self'",
